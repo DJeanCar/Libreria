@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 
-from .models import Book, Favourite
-from .serializers import BookSerializer, FavouriteSerializer
+from .models import Book, Favourite, Comment
+from .serializers import BookSerializer, FavouriteSerializer, CommentSerializer
 
 
 class BookViewSet(viewsets.ReadOnlyModelViewSet):
@@ -24,7 +24,7 @@ class FavouriteViewSet(viewsets.ViewSet):
 
 	def list(self, request):
 		favourite_books = Favourite.objects.filter(user = request.user)
-		favourite_ser = FavouriteSerializer(favourite_books, many=True, context={'request': request})
+		favourite_ser = FavouriteSerializer(favourite_books, many=True)
 		return Response(favourite_ser.data)
 
 	def retrieve(self, request, pk):
@@ -39,3 +39,12 @@ class FavouriteViewSet(viewsets.ViewSet):
 			Favourite.objects.create(user = request.user, 
 						book = get_object_or_404(Book, pk = request.POST['book']))
 		return Response(status=status.HTTP_201_CREATED)
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+
+	queryset = Comment.objects.all()
+	serializer_class = CommentSerializer
+
+	def get_queryset(self):
+		return self.queryset.filter(book__pk = self.kwargs["book_pk"])

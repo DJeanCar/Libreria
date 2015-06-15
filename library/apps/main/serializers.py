@@ -32,3 +32,10 @@ class FavouriteSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Favourite
 		fields = ('id' ,'book',)
+
+
+class CommentSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Comment
+		fields = ('id','user', 'book' ,'comment')
