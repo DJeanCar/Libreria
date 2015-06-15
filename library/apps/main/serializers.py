@@ -31,7 +31,7 @@ class FavouriteSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Favourite
-		fields = ('id' ,'book',)
+		fields = ('id' ,'book','user')
 
 
 class CommentSerializer(serializers.ModelSerializer):
